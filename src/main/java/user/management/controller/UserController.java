@@ -14,6 +14,8 @@ import user.management.dto.http.UserRequest;
 import org.springframework.web.bind.annotation.*;
 import user.management.service.UserService;
 
+import java.util.concurrent.ExecutionException;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class UserController { //TODO: Add JWT Token description
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "",
             content = @Content(schema = @Schema(anyOf = UserCreateRequest.class)))
     @PostMapping
-    public String create(@Validated @RequestBody UserCreateRequest request){
+    public String create(@Validated @RequestBody UserCreateRequest request) {
         return userService.createUser(request);
     }
 

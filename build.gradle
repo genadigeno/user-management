@@ -28,24 +28,25 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.springframework.kafka:spring-kafka'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-//	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
-//	testImplementation 'org.testcontainers:kafka'
+	testImplementation 'org.testcontainers:kafka'
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
-
 //	implementation 'com.hazelcast:hazelcast:5.3.5'
 	implementation 'com.hazelcast:hazelcast-spring:5.0'
+
+//	implementation 'org.passay:passay:1.6.0'
 }
 
 tasks.named('test') {

@@ -8,20 +8,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = PasswordMatchValidator.class)
+@Constraint(validatedBy = FieldMatchValidator.class)
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordMatch {
+public @interface FieldMatch {
     String message() default "Fields do not match";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-
     String first();
     String second();
 
     @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface List {
-        PasswordMatch[] value();
+        FieldMatch[] value();
     }
 }
