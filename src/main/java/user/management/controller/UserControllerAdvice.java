@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.method.MethodValidationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import user.management.dto.ErrorDto;
+import user.management.exception.AccessNotAllowedException;
 import user.management.exception.UserAlreadyExistsException;
 import user.management.exception.UserNotFoundException;
 
@@ -43,46 +45,46 @@ public class UserControllerAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
-    /*@Override
-    protected ResponseEntity<Object> handleMethodValidationException(MethodValidationException ex, HttpHeaders headers,
-                                                                     HttpStatus status, WebRequest request) {
-        return super.handleMethodValidationException(ex, headers, status, request);
-    }*/
-
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ErrorDto handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
         log.error(ex.getLocalizedMessage(), ex);
-        return ErrorDto.builder()
-                .timestamp(LocalDateTime.now())
-                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message(ex.getLocalizedMessage())
-                .path(request.getDescription(false))
-                .build();
+        return buildErrorResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserNotFoundException.class)
     protected ErrorDto handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
         log.warn(ex.getLocalizedMessage(), ex);
-        return ErrorDto.builder()
-                .timestamp(LocalDateTime.now())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getLocalizedMessage())
-                .path(request.getDescription(false))
-                .build();
+        return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserAlreadyExistsException.class)
     protected ErrorDto handleUserAlreadyExistsException(UserAlreadyExistsException ex, WebRequest request) {
         log.warn(ex.getLocalizedMessage(), ex);
+        return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UsernameNotFoundException.class)
+    protected ErrorDto handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
+        log.warn(ex.getLocalizedMessage(), ex);
+        return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessNotAllowedException.class)
+    protected ErrorDto handleAccessNotAllowedException(AccessNotAllowedException ex, WebRequest request) {
+        log.warn(ex.getLocalizedMessage(), ex);
+        return buildErrorResponse(ex, request, HttpStatus.FORBIDDEN);
+    }
+
+    private ErrorDto buildErrorResponse(RuntimeException ex, WebRequest request, HttpStatus status){
         return ErrorDto.builder()
                 .timestamp(LocalDateTime.now())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .status(HttpStatus.BAD_REQUEST.value())
+                .error(status.getReasonPhrase())
+                .status(status.value())
                 .message(ex.getLocalizedMessage())
                 .path(request.getDescription(false))
                 .build();
