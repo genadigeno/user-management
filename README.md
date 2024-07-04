@@ -11,13 +11,7 @@ To overcome Dual Writing problem we also implement Outbox pattern.
 ### Installation requirements
 In order to start up the application you need have installed:
 - Docker on you machine </br>
-- git </br>
-  or
-- Apache kafka cluster with at least two brokers
 - git
-- postgres DB 13+
-- gradle
-- JDK-17
 
 ### Installation steps
 The project installation could be done using docker-compose.yml via command line interface (CMD):
