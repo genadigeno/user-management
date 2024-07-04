@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
@@ -16,15 +14,9 @@ import user.management.dto.UserDto;
 import user.management.dto.http.UserCreateRequest;
 import user.management.dto.http.UserRequest;
 import user.management.dto.http.UserResponse;
-import user.management.exception.UserAlreadyExistsException;
 import user.management.exception.UserNotFoundException;
-import user.management.model.Role;
-import user.management.model.User;
-import user.management.model.UserRole;
+import user.management.service.JwtService;
 import user.management.service.UserService;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -42,6 +34,9 @@ class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    JwtService jwtService;
 
     static UserCreateRequest createRequest;
 
@@ -64,6 +59,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON.getMediaType()))
                 .andExpect(status().isOk());
     }
+
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void test_users_with_fail() throws Exception {

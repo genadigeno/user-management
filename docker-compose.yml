@@ -55,21 +55,20 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
 #      - .\\docker_workspace\\postgres:/var/lib/postgresql/data
-      - .\\init.sql:/docker-entrypoint-initdb.d/init.sql
+      - .\\order_init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - gvg_net
   postgres-users:
     container_name: postgres-users
     image: "postgres:13.11"
     ports:
-      - "5432:5432"
+      - "25432:5432"
     environment:
       - POSTGRES_DB=user_management
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret
     volumes:
-      #      - .\\docker_workspace\\postgres:/var/lib/postgresql/data
-      - .\\init.sql:/docker-entrypoint-initdb.d/init.sql
+      - .\\user_init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - gvg_net
   user-management:
@@ -91,27 +90,27 @@ services:
       - "8282:8282"
     networks:
       - gvg_net
-#  order-management:
-#    container_name: order-management
-#    image: "genadigeno/order-management:0.0.1"
-#    depends_on:
-#      - kafka-1
-#      - kafka-2
-#      - postgres-orders
-#    environment:
-#      - SERVER_PORT=8181
-#      - KAFKA_BOOTSTRAP_SERVERS=kafka-1:9092
-#      - KAFKA_ORDER_TOPIC_NAME=orders.topic
-#      - KAFKA_ORDER_DLT_TOPIC_NAME=orders.topic.dlt
-#      - KAFKA_SUCCESSFUL_ORDER_TOPIC_NAME=orders.success.topic
-#      - KAFKA_FAILED_ORDER_TOPIC_NAME=orders.failed.topic
-#      - POSTGRES_URL=jdbc:postgresql://postgres-orders/order_management?currentSchema=gvggroup
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=secret
-#    ports:
-#      - "8181:8181"
-#    networks:
-#      - gvg_net
+  order-management:
+    container_name: order-management
+    image: "genadigeno/order-management:latest"
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - postgres-orders
+    environment:
+      - SERVER_PORT=8181
+      - KAFKA_BOOTSTRAP_SERVERS=kafka-1:9092
+      - KAFKA_ORDER_TOPIC_NAME=orders.topic
+      - KAFKA_ORDER_DLT_TOPIC_NAME=orders.topic.dlt
+      - KAFKA_SUCCESSFUL_ORDER_TOPIC_NAME=orders.success.topic
+      - KAFKA_FAILED_ORDER_TOPIC_NAME=orders.failed.topic
+      - POSTGRES_URL=jdbc:postgresql://postgres-orders/order_management?currentSchema=gvggroup
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "8181:8181"
+    networks:
+      - gvg_net
 
 networks:
   gvg_net:

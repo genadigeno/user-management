@@ -65,7 +65,7 @@ public class UserController {
     @ApiResponse(responseCode = "403", description = "Access denied", content = @Content)
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer JWT_TOKEN")
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('ADMIN') or (hasRole('USER') and #id==authentication.principal.id)")
+    @PreAuthorize("hasAnyRole('ADMIN') or (hasRole('USER') and #id==authentication.principal.id)")
     public UserResponse update(@PathVariable int id, @Validated @RequestBody UserRequest request){
         return userService.update(id, request);
     }
