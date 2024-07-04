@@ -22,16 +22,9 @@ In order to start up the application you need have installed:
 ### Installation steps
 The project installation could be done using docker-compose.yml via command line interface (CMD):
 ```
-git clone https://github.com/genadigeno/user-management.git &&
-cd user-management &&
-docker compose up
-```
-or
-```
-git clone https://github.com/genadigeno/user-management.git &&
-cd user-management &&
-./gradleview clean bootJar &&
-java -jar ./build/libs/user-management.jar
+git clone https://github.com/genadigeno/user-management.git 
+cd user-management 
+docker compose up -d
 ```
 ### JVM Parameters
 - `SERVER_PORT` - application port number, default: 8282
